@@ -1,0 +1,139 @@
+{
+    "cells": [
+        {
+            "language": "markdown",
+            "source": [
+                "## Fine tuned OpenAI davinci model - UX job titles"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### Load up modules and api key"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "const Prompt = require('@glennjones/prompt')\nconst {Prompter, OpenAI} = Prompt;\n\nconst DotEnv = require('dotenv');\nDotEnv.config({path: '../.env'});\nconst apiKey = process.env.OPENAI_API_KEY;"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### Fine the current fine tuned models for the account"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "let openAI = new OpenAI(apiKey);\nopenAI.listModels().then(models => {\n    // filter out all but users custom models\n    custom = models.filter(model =>{\n         return model.owned_by.startsWith('user-');\n    })\n    console.log(custom);\n});"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "0.7008986670002342 seconds",
+                                "[",
+                                "  {",
+                                "    id: 'ada:ft-personal-2023-03-19-23-12-25',",
+                                "    object: 'model',",
+                                "    created: 1679267545,",
+                                "    owned_by: 'user-xp8dtswosvrthbxqmnjhw9zh',",
+                                "    permission: [ [Object] ],",
+                                "    root: 'ada:2020-05-03',",
+                                "    parent: 'ada:2020-05-03'",
+                                "  },",
+                                "  {",
+                                "    id: 'davinci:ft-personal-2023-03-20-07-19-39',",
+                                "    object: 'model',",
+                                "    created: 1679296779,",
+                                "    owned_by: 'user-xp8dtswosvrthbxqmnjhw9zh',",
+                                "    permission: [ [Object] ],",
+                                "    root: 'davinci:2020-05-03',",
+                                "    parent: 'davinci:2020-05-03'",
+                                "  },",
+                                "  {",
+                                "    id: 'davinci:ft-personal-2023-03-21-22-17-08',",
+                                "    object: 'model',",
+                                "    created: 1679437028,",
+                                "    owned_by: 'user-xp8dtswosvrthbxqmnjhw9zh',",
+                                "    permission: [ [Object] ],",
+                                "    root: 'davinci:2020-05-03',",
+                                "    parent: 'davinci:2020-05-03'",
+                                "  }",
+                                "]",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### Load prompt with api key and custom model name"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "let model = new OpenAI(apiKey, 'davinci:ft-personal-2023-03-20-07-19-39');\nlet nlpPrompter = new Prompter(model);"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### Function to add start and end position char numbers to entities"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "function addStartEnd(text, entities){\n    let newEntities = [];\n    for (let entity of entities) {\n        let start = 0;\n        let end = 0;\n        start = text.indexOf(entity.text);\n        if(start > -1){\n            end = start + entity.text.length;\n            newEntities.push({\n                text: entity.text,\n                start: start,\n                end: end,\n                label: entity.label\n            });\n        }else{\n            console.log('could not find entity in text: ', entity);\n        }\n    }\n    return newEntities;\n}"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### Fire prompt with job title, simple template and stop chars"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "jobtitle = 'Senior UX Designer- 6 month contract'\nlet result = await nlpPrompter.fit('ux-jobtitles.njk', {\n    textInput: jobtitle,\n    stop: '\"}]',\n    maxTokens: 600,\n  });\n\nner = addStartEnd(jobtitle, result.data);\nconsole.log(ner);"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "2.7665658340007067 seconds",
+                                "[",
+                                "  { text: 'Senior', start: 0, end: 6, label: 'SENIORITY' },",
+                                "  { text: 'Senior UX Designer', start: 0, end: 18, label: 'JOBTITLE' },",
+                                "  { text: 'UX Designer', start: 7, end: 18, label: 'COREJOBTITLE' }",
+                                "]",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

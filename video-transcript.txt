@@ -1,0 +1,754 @@
+45:32
+being said my name is Glenn it's traditional with uh these uh Edinburgh Jas talks I'm just going to do a tiny
+45:38
+little intro about myself so you know a little bit about me but maybe it'll give some context to this talk as well so my
+45:44
+background originally was in informational architecture and design during the years I've got heavily
+45:49
+involved in development as well so I've done a bit of node work back end apis and things like that but the most of my
+45:55
+career has actually been involved in a startup that I co-founded about 20 years ago
+46:01
+um was in recruitment built job boards did lots of sort of ta Tech or Talent acquisition Tech I sold it
+46:09
+um about three years ago and exited about a year ago so in the last year after
+46:15
+having a little bit of a break I decided I needed something of a bit of a challenge and what I chose was to teach
+46:20
+myself about machine learning this didn't come out of the blue the last few years of working in the company that I
+46:26
+was involved in I was head of product strategy and Innovation we had multiple Dev teams
+46:32
+usual sort of front-end back-end teams ux teams design teams
+46:39
+data analysts and a data science team the products that I would developing were things like recommendation systems
+46:45
+for jobs career pathing tools things that looked at your career and looked at the skills you've got and how you moved
+46:51
+that forward and obviously although I wasn't involved in the day-to-day of the data science I was involved at top level
+46:57
+with it and I was fascinated about how the data science team seemed to work very differently to the development
+47:02
+teams they had a different process they operated very differently an ethos
+47:07
+around research so I wanted to learn a little bit more because I want to be more empathetic to the people that do
+47:13
+that type of work and I think it'd be really informative to me from a product perspective and from sort of more traditional development perspective so
+47:20
+I'm not a data scientist I'm someone who's into JavaScript and development who's trying to learn and today I'm
+47:26
+sharing with you my journey of how I'm doing and where I'm at with it because I'm still on that Journey
+47:32
+um two years ago when I moved up to Edinburgh I got involved with some of the meetups that are around data science and I was listening into a couple of
+47:40
+data scientists and one of them said this the worst thing about data science is the senior developers that's probably
+47:45
+me and other people with a lot of domain knowledge which I have about the subject of our own recruitment getting involved
+47:51
+and I think it's because we don't approach it with the same sort of processes or ideology that they do I am
+47:58
+lots of data scientists read academic papers all the time they're very academic in it they they talk to each
+48:04
+other through academic papers that's how they communicate but really importantly they they look at their subject and they
+48:10
+come at it from the same sort of scientific method they come up with a hypothesis and they use experimentation
+48:16
+and tests to work out whether that works or not and they iterate on that process so this gives you something that looks
+48:22
+like this usually it can vary quite a lot but usually this is the core of what uh machine learning processes are you
+48:29
+get hold of the data that you want that can be really difficult you learn how to clean and manipulate it you find some
+48:36
+sort of statistical algorithm to help you build your models then you test your
+48:41
+data so we're going back to that scientific method and finally you rip round over and over again improving
+48:47
+doing these these stages backwards and forwards so we're going to look at this and look at it through the lens of JavaScript and
+48:53
+see if we can do something similar with a technology that's not really well known for doing that type of thing
+49:00
+but first I just want to look at what the landscape's like so these are some of the libraries that are used my
+49:05
+specific interest in in machine learning is around language processing so natural language processing it comes from my
+49:12
+background in informational architecture The Gray Line relates to the process we
+49:17
+were just talking about it above it at some of the Python libraries that are available I could have put about five
+49:23
+times more than that on that screen there has a huge amount down the bottom are some of the JavaScript libraries
+49:28
+that are available that's about it but we do get coverage we get coverage across the whole whole journey there so
+49:34
+we're going to have a look at some of these um because I don't like myself make my life easy like I trying to do machine
+49:41
+learning with JavaScript I also I'm going to look at um the data as well in the same way most
+49:46
+of the libraries provide you with really neat little um packets of data that you can learn against they're sort of all packaged up
+49:53
+they've been created audited they look they work really well I'm not going to use them I want to use something from
+49:58
+The Real World to make my life even harder so I'm going back to where I came from which is Recruitment and the thing
+50:04
+we're going to look at today is how to parse out job titles job titles are really small so it makes it quite easy
+50:10
+for me to put them on the screen we don't have to deal with lots of text but they're actually quite difficult they can be written in lots and lots of
+50:16
+different ways what I want to do and what I want to show you through today is how to pass out specific parts of them
+50:22
+so I want to go for what's referred to as a canonical job title so here it would be lead ux researcher not the
+50:28
+other bits of information they're quite useful like the fact that it's based in Edinburgh and part-time but it's not of interest to me today and things like the
+50:36
+seniority so lead Apprentice Junior intern those types of things that gives me a sense of the
+50:41
+hierarchy where that job title is coming from so if I'm not going to pick up one of
+50:47
+these nice clean data sets to learn on I have to create my own and the way that you usually do this is through an
+50:53
+annotation tool I'm not sure I'm going to pronounce this correctly but this Docker cone or however it's pronounced
+50:58
+is a really nice one it can be loaded through Docker you just literally download the docker image stick it up
+51:03
+fire it up on your machine and what you are given it here is just a long list of job titles from the ux space I've got a
+51:11
+friend Danny Hope in Brighton who runs ux Brighton and he has a job board he's given me 1600 job titles for me to play
+51:17
+with the tasks actually pretty simple for this one you get each it basically goes
+51:23
+through each of the job titles I've loaded in it comes into this screen you basically select the piece of text and
+51:29
+then you tag it so you can see here I've tagged the word senior I've tagged the canonical area of it so senior ux
+51:34
+researchers job title and there's another tag that I've been using for something else there which we'll forget about for now once you've done that you
+51:41
+go through all 1600 takes a little while but you go through them at them all up this tool then exports them in a Json L
+51:49
+file so that means a Json object for every line I've taken one of these out just to show you what it looks like it's
+51:55
+really simple the markup of this the text is the original text that I inputted so from that list that I put
+52:01
+into it at the beginning and then that the market the annotations that you just saw on the screen in the
+52:07
+UI are turned into numbers so zero is the first letter s of senior and six is
+52:13
+the r of senior so it basically shows you what it is there and there you have it the data for us to play with
+52:21
+so the next stage is to clean and manipulate data um it's actually the collection and the
+52:27
+manipulation of data is the bit that usually takes the time in these projects um
+52:33
+and to do this we need to talk about notebooks so some of you here might have already played with things like Jupiter
+52:39
+which is the python notebook notebooks are really important in this domain
+52:44
+um they I suspect they come from the original sort of like lab-based notebooks that people used to use for
+52:49
+noting down their experiments and what the results were and the ability to go back and check and reiterate on them but
+52:55
+here obviously we're talking about the digital domain so we've got um documents that are used to contain the material to
+53:02
+explore and analyze the data set they have lots of notes in them they help us understand the concepts and the flows
+53:08
+they're made up of modules so like little beats of them you have code the output from the code visualization so
+53:14
+that's charts and other tables Etc explanationally text so you know what was I trying to achieve what was the
+53:20
+outcome and then usually at the end some sort of statistical results from them um the beauty about them being digital
+53:27
+is they can be shared so you can work with other people and people can learn from them as well so luckily for us we actually have
+53:34
+um a version of this in the JavaScript node environment and I'm going to jump out of the slides now and demo you
+53:41
+exactly how it works we're going to look at both at how a notebook works and also
+53:47
+about some of the tools that you can use in JavaScript for playing around with text so let's hope the demo gods are going to
+53:53
+be kind to me and that everything goes to plan so not that one we'll come back to that
+53:59
+one okay so this is a plugin for visual
+54:05
+studio it's called note node notebook I don't know why it's called node node but but it's really easy to install and once
+54:12
+it's installed you can create these files with an nnb extension and they have segments in them it's a
+54:20
+bit difficult to see but if I can start dragging them around you can see that they're built up of modules so this bit here is just a markdown module and I can
+54:27
+click and edit on it and edit in markdown and then if I just click here
+54:34
+it turns it into text so you can put your notes and stuff in there the more interesting piece is that you can have
+54:40
+code areas so here you can see this is Javascript I can change that I could make it into typescript I can have power
+54:46
+shells Etc and these little code areas execute
+54:51
+so if I click on the execute button here you'll see the little tick comes up and it's executed the text in it there's a
+54:58
+couple of things from a JavaScript perspective to know about these notebooks um they actually underneath the HUD are
+55:06
+only using require which means common JS to those people that know so you can see here the module that I've included is
+55:13
+actually an es6 module so it uses import from usually if you use this little EMS
+55:20
+hook Edition it will help you deal with both module types so you can use both in
+55:26
+here also under the hood it converts everything from constants and lets into vars for those that know that so it's
+55:34
+not really worth using them to be honest so I although I have got let in there occasionally it's all been converted and
+55:40
+you can do async awaits directly off the first line rather than having to be in a function a few just things for you to
+55:47
+know about this usage okay and barring that it's pretty simple you can see this is the uh the The Notebook you can read
+55:54
+down it and you can play with the bits of code so we're going to go through this and just have a look at a few different things I've got a few um
+56:00
+pieces of code here which are really common for doing text wrangling the first one is called tokenization this is
+56:05
+the most simple version of tokenization it's a couple of regular Expressions it takes the uh the text here senior
+56:12
+front-end developer and converts it into array of lowercased and it also does takes the dashes out so it basically
+56:20
+turns front end Dash into the normal version of it this one's actually the text from directly inside of tensorflow
+56:27
+so you get much more complicated versions of that I tend not to use these
+56:33
+I tend to actually to move to much more sophisticated tree based and parsing of text the libraries that I
+56:42
+used are from a group of people that call themselves a unified Collective they build a whole series of modules I
+56:49
+think it's about 113. they do they deal with parsing of text HTML and markdown
+56:54
+if you use markdown in the node.javascript environment you're probably using one of their modules
+56:59
+under the hood I believe the 130 odd modules that this group can control are downloaded more than a billion times a
+57:06
+month they're in things like Gatsby the documentation for node itself is actually written using some of these
+57:12
+things and you'll see in a minute they're extremely powerful and a really good way to to deal with text
+57:18
+so the first two lines here is just a part so it's going to parse in the English as it says and the second one just helps me inspect it so it basically
+57:25
+writes it out in the console for us so again we've got a a little sentence there and if I press
+57:31
+the execute you'll see what it does so basically it strips that text into a
+57:37
+tree structure quite a sophisticated tree structure so let's just pull out a few different things here can you
+57:42
+actually all see that is that visible to you so just for example here the word node you can see for front end which is
+57:49
+done with the dash in the middle it's got a piece of text the punctuation and the other piece of text separate
+57:54
+everything's all lens structured like this there are about 30 modules that
+58:01
+allow you to modify this so you can basically rip through these trees and look for ancestors or children of
+58:08
+certain nodes and and process these really well I'm just going to show you one of them at the moment so again I'm
+58:15
+just importing a few different modules at the top these are the modules that will help us play with it the most important bit is actually this bit here
+58:21
+so it's called visit and it allows you to iterate through the whole tree and pull out specific nodes so what I'm
+58:27
+going to ask it to do is just list me all the punctuation notes which is just done there if I change that to
+58:36
+word nodes it will allow me to just pull out all of the text and stuff these modules are 30
+58:44
+car modules like this can be used to build things like editors inline editors
+58:50
+any type of text processing tool really quite powerful
+58:56
+moving on from that we actually have specific libraries in node that offer a language processing natural language
+59:03
+processing this is world called wink I've just loaded it up it actually has its own model here this this this line
+59:09
+here the the second line down is a model and that's going to help us process the piece of text I'm just going to fire it
+59:16
+off for you and here you can actually see in the notebook a demonstration of some sort of output like the proper
+59:22
+visualization it's a it's a table rather than than just a console log and it's
+59:28
+done some more processing so the first thing it's done is it stripped down my my text into this single bits of tokens
+59:35
+as they're called individual words the shape is basically the capitalization sometimes it's useful to be able to play
+59:41
+with the capitalization stop words are like tell me which of the common words I probably don't want to care about so we
+59:48
+and I are considered very common this type of use of stop words is is used in
+59:53
+things like elasticsearch and stuff like that for doing free text searching the next one along is sort of slightly more
+59:58
+complicated this is it looking at the use of English and deciding whether a word has been used as a verb or as a
+1:00:04
+noun is referred to as part of speech and that's what it's using the language model to determine and then the last two
+1:00:10
+are ways of shortening uh text because when we want to make comparisons sometimes we want to make the
+1:00:16
+comparisons on the sort of shortened version of it so let's take one word they're planning so it's basically both
+1:00:23
+of the stemming and limitization have taken that that were planning and produce plan they do the same for
+1:00:28
+planner planned and all the variants of that and bring it down to its core bit the difference is stemming is done
+1:00:34
+through a rule system and can produce word some some sort of text that's not
+1:00:40
+actually a true word whereas Limited always produces a proper word and is done from a language model itself
+1:00:48
+I've gone through all of that this is not a full set of all of the tools that are available mainly just to show you
+1:00:54
+that there are powerful Tools in JavaScript that will allow you to manipulate text just like there are in
+1:00:59
+Python and some of them are as equally as good especially the ones around the abstract trees that we looked at so the
+1:01:05
+tree node structures and stuff like that and hopefully as well you saw a little bit of how the
+1:01:11
+the notebooks worked okay so if we just go back to um
+1:01:17
+My Demo sorry where's my uh there we go
+1:01:24
+okay so just before we move on to training and stuff I've missed out a whole section here I'd love to put it in
+1:01:30
+about how you deal with the text and turn it into numbers and how you deal with number structures those of you who
+1:01:37
+are involved in this area will probably use things like Panda and stuff like pandas and stuff like that there are
+1:01:44
+equivalents in in the JS world but it's probably too much and too detailed to
+1:01:49
+cover in a toilet like this but if you want to ask a question about it we can cover it later so straight on to doing models so I was
+1:01:56
+going to start with the simple models and move on my way up to the open AI stuff for concern Jack TPS is just so
+1:02:04
+prevalent at the moment but let's deal with the gorilla straight away and go straight into it so if you go in and
+1:02:11
+look at their apis they actually have more than just the chat apis there is about 70 models that are available
+1:02:17
+through rest apis off their their website the majority of them are these
+1:02:22
+large language models the llms as they're called and they're non-deterministic which is very
+1:02:27
+important for you to understand that means if you give it a prompt you're not guaranteed to get the same answer each
+1:02:34
+time non-deterministic so for some of the uses that we're going to look at in a minute that's quite important they're a
+1:02:40
+class of model that's referred to as Transformers and the other important bit is that they can take fine tuning I.E we
+1:02:46
+can add additional information to make them work better so let's have a quick look so I'm sure you've all done stuff like this or
+1:02:52
+hopefully you have you go in you put something in and I've just asked for two sentences about Ben Nevis great it's
+1:02:58
+really useful for doing stuff like that but that's not what I want to do today today I want to know whether it can help me with that little problem I have about
+1:03:05
+whether I can extract out bits of information about a job title so now you
+1:03:11
+move on to much more complex prompts this is one that I've taken from someone else I think it could be actually
+1:03:16
+reduced a little bit and it's strangely uh rubbing the ego of it you are a
+1:03:23
+highly intelligent and accurate domain entity extraction system I'm not sure it
+1:03:28
+needs to be told it's highly accurate and intelligent but anyway um so basically the first top bit is say
+1:03:34
+basically giving a context in which it should operate I.E pretend that you're going to be an extraction system that
+1:03:40
+can take out bits of information from me the the bit that's down here is
+1:03:45
+basically telling it about the format that I want to the information to come back and if you can see it's got some characters in here that look very much
+1:03:52
+like Jason and that's because I'm telling it basically to give me Jason back again and then finally this is your input
+1:03:58
+which is a very long job title and this is what it gives me back
+1:04:04
+a piece of Json it's quite interesting because I haven't told it about what labels or what bits
+1:04:11
+of information to extract it's made that out itself some of it's quite good some of it's not so so it's extracted
+1:04:17
+actually the core job title for me senior ux researcher brilliant it's done that but it's labeled it up as person
+1:04:23
+which I think is probably not quite right I would have called that a job job title and it's done the same maybe for
+1:04:28
+the next one where it said the label is time but it's a six month contract I might have called that contract duration
+1:04:34
+or something like that slightly different terminology but actually it's not done a bad place places Edinburgh so
+1:04:40
+um you know it's not doing too bad a job so I'm going to jump now back into demo mode and I'm going to show you how we
+1:04:47
+can make that work properly for us um so if I go back to
+1:04:53
+here and we go into a different notebook so I've created myself a little project
+1:04:59
+called prompt all that prompt does it's a very small wrapper around the API to
+1:05:04
+open AI it basically does the request for me rest request and brings back the information and it just checks the uh
+1:05:11
+the stuff that come back is valid Json and that's all that it's doing um so the first two lines here is I'm
+1:05:18
+just calling my library prompt I've just required it I've pulled out a couple of
+1:05:23
+objects for the prompter and the model for for my prompt the three lines there
+1:05:28
+is just me and getting my open AI key in a way that you can't see because I don't
+1:05:34
+want someone using it while I'm on stage and so we're just going to quickly
+1:05:39
+hopefully we can do this live yep there we go we can click the different boxes and they're executing now so the first
+1:05:46
+song we've got here I'm just going to clear that and see if we can get it to work for you live on stage so basically
+1:05:52
+I'm making an instance on my prompt I'm giving it a template that template has
+1:05:57
+that big prompt that you just saw and a couple of injection points to put my job title into it so that I don't have to
+1:06:03
+write that all of the time that's all that's going on here so the input is that and the ux design bit is just
+1:06:09
+saying operate in the context of ux design if it was something else like I was having engineering job titles I'd
+1:06:15
+give it that just to give it a little bit of thing so if we press that now hopefully it'll go sometimes it's slow
+1:06:21
+sometimes it's fast no it's been pretty fast it's come back again and here you can see it's brought back the Json for
+1:06:27
+me with and it's parsed out things like the job title this time it's got some of the uh the labels a bit better like
+1:06:33
+position contract type duration and stuff like that but they're not quite still what I want so you can actually
+1:06:40
+create a prompt where you tell it what the labels are that you want so this is what I'm doing here I've just added one
+1:06:45
+more row to it and again you can see now I won't execute it just for Speed but
+1:06:50
+you can see the one that I previously did it's now giving me the labels that I want but it's I've got less material
+1:06:56
+coming out of it so there's a bit of a compromise that's gone on as we've executed against this
+1:07:02
+we can go one step further and I can do an inline fine tuning this is basically where I
+1:07:09
+give it examples um so you can see this quite often with prompts you could be examples here it's quite structured I basically said the
+1:07:15
+text at the top is what I'm going to give you the labels in this little array here is what I expect back have another
+1:07:22
+go and this time it's come back and it's giving me the right labels but it's giving me a little bit more information
+1:07:28
+so I've kicked it through a little bit more now obviously sending all of this
+1:07:33
+information in a prompt is not good so we can actually fine-tune this model so
+1:07:39
+most of these language models are pretty big and they understand the languages that they've been taught on but you can
+1:07:45
+layer on top of them um you can give them material openai allow you to do this by creating a file
+1:07:51
+uploading it and then they will give you a new model which is basically their base model with your finer tunings on
+1:07:57
+top the file that you create is actually pretty simple it's it looks really complicated here it's a very messy but
+1:08:03
+it's only it's only constructed of two things the prompt in which my case is the the job title and the Json that I
+1:08:10
+expect back again and you do that multiple times so what I did was I took that annotation that I had from my my
+1:08:16
+tool early on and I created this file from it so and I've got 500 of these I
+1:08:22
+fired them over to the open open AI there's an end point for you to load this up and it created the model for me
+1:08:28
+to to play with from that point onwards so here
+1:08:33
+maybe doing exactly the same but this time when I create um my my prompt
+1:08:41
+well first off you can actually also list out the models that are available to you so this what you can see here is
+1:08:46
+me listing out the name the ID is basically the the module name it's all really quite obscure naming but but
+1:08:53
+that's the model that was created for me so when I load up my prompt tool this time
+1:08:59
+I give it a name and that's the model name the custom one that's got my fine
+1:09:04
+tunings in it but forget that little um function there
+1:09:10
+the prompter I'm going to do is I'm just going to fire this prompt off again now it's got um it's got basically the title
+1:09:18
+in it um I've got a stop symbol basically the stop Mark is to tell it to stop
+1:09:24
+generating characters or additional stuff after a certain point the three characters you can see there are the
+1:09:31
+three characters common to the end of a Json object so that's the reason why I've given it that and I've given it a
+1:09:37
+Max token a bit and I'll fire it off hopefully it will actually work and you can see it come
+1:09:43
+back and here we go it's come back again the function above uh was just a little JavaScript function
+1:09:49
+that went through that and checked that the words that it gave me are actually in the original text it's like a bit of
+1:09:56
+railing just to make sure that it's not generating anything that that's not there from the original and it gives me
+1:10:01
+the start and end positions of of the texts so they're starting into the characters and stuff like that so that's
+1:10:07
+how you can use prompting and the general models now to do something really specific
+1:10:14
+um but that's only part of the story because if we go back to um the bit that
+1:10:19
+we were talking about earlier um I don't want to be that developer guy so
+1:10:25
+realistically um oh I've just put this up here sorry before I go on to that just to show you
+1:10:30
+what the prompt for a fine tune model looks like you can get rid of all the rest of the junk you literally just give
+1:10:36
+it the text a little symbol which is the arrow symbol to tell it this is the end of my input text and then it gives you
+1:10:43
+back the Json afterwards so going back to the bit I don't want to
+1:10:48
+be that guy that the data scientists talk about so if I'm going to use this type of stuff I don't I want to do it in
+1:10:54
+a proper way which means I've got to test my outcomes it has to be done with an experiment
+1:11:00
+so I haven't shown you here but in the background while I was creating this I actually created an API a rules-based
+1:11:07
+API for the job titles I downloaded 60 000 open source job titles and built a
+1:11:15
+basically a comparison tool that went through all of the titles and looked from just doing Simple comparisons using
+1:11:21
+those those tokenizing stuff that we saw earlier on it found 63 of them that's a perfect
+1:11:29
+match at 63 it actually did quite good matches so let's say I was looking for ux designer sometimes it would find just
+1:11:36
+designer or not ux Designer but I was only selecting perfect matches so that's pretty good and its speed of operation
+1:11:42
+with something like 94 milliseconds I'm sure I could get that faster the version of the open API one where I
+1:11:49
+gave it the label so I told it these are the labels that you should use um that was 79 pretty good but when we
+1:11:57
+fine-tune it up to 95 I'm sure I could get those higher this is just my first attempt at it
+1:12:04
+um but now I've got a baseline I've tested it I've got a bass line so you know I said that the the the pump looked
+1:12:10
+a bit over the top I could now change that prompt and see if I could make it tursa a is smaller and better and know
+1:12:18
+that I've got it better I'm not just playing I'm actually testing and coming back and seeing how things work
+1:12:24
+interestingly when I looked at the seniority one the seniority one had a very strange outcome the first version of the open AI
+1:12:32
+one where I used labels was actually really quite low it was 49 43.9 when I
+1:12:39
+looked at into the data the reason is is because I used the label seniority and I expected it to think fine things like
+1:12:46
+team leader which it didn't it found things like manager senior and stuff like that but some of
+1:12:53
+the things I wanted in there and it's because the terminology I was using was not very precise it knew what seniority
+1:12:59
+was in its sense but as soon as I trained it and said no no no seniorities about all of these things it includes
+1:13:04
+things like internships apprenticeships all of that type of thing it came back with a much better result
+1:13:11
+so testing really really important into the rest of this I mean I really
+1:13:18
+think that this is quite powerful and it can be used for not just the pro the the things that I just showed you it can be
+1:13:24
+used for lots of different other things and it can be used in a very structured way where you can test it properly but I
+1:13:29
+also want to learn about some of the more fundamental stuff so I've also been looking at other
+1:13:34
+things as well so I've sort of stepped back a couple of generations from what's the bleeding
+1:13:39
+edge at the moment with Transformer models like open AIS using and looked at something called the CNN which is a type
+1:13:46
+of neural network um I'm probably not going to demo this to you because it's a um it's I'm running out of time a little
+1:13:52
+bit but basically this was built from scratch in JavaScript so it was
+1:13:58
+completely built in JavaScript to use intense tensorflow.js the model was generated in JavaScript
+1:14:05
+it runs really quickly at about 26 milliseconds it's got between a 94 and
+1:14:12
+98 accuracy and it tells the difference between whether a job advert is written
+1:14:18
+by an agency or has been written by a direct employer something that I need for the scraping work that I've been
+1:14:23
+doing I need to be able to tell those two things and it's slightly older but it works really well and the thing about
+1:14:29
+a CNN is it's much smaller as well the models only a few megabytes I've actually deployed this through node onto
+1:14:36
+an eight pound a month server and it works perfectly um so it's quite interesting to be able
+1:14:41
+to move back a little bit and go into some of the technology that's prior to that and it's still really useful for
+1:14:47
+very specific use cases but I want to learn more about how you
+1:14:53
+can use Transformers because that's the sort of state of the art at the moment and in the python World they have
+1:14:58
+hugging face which is this amazing site it has it has literally thousands of models on there for you to play with I
+1:15:05
+think at the moment instead for looking at the number or something it's like 160 000 that's uploaded on there and it has
+1:15:11
+all of the current best language models from places like Facebook and Google and
+1:15:16
+you can use them and then put your own training on top of them but they seem to have been until recently out of the
+1:15:23
+reach of someone like myself who's doing stuff in JavaScript that was until this happened this happened in the middle of
+1:15:30
+summer last year there's a group called Onyx which is the open neural network exchange who are doing this project
+1:15:36
+which is basically the ability to take models that are generated in things like pytorch or tensorflow and you know use
+1:15:45
+them or reuse them so a simplest way to understand this and it is a very simplest way is they're trying to sort
+1:15:50
+of dockify the whole sort of system a little bit and it they can take these models and then deploy them onto
+1:15:56
+different systems and execute them the great thing is that they wrote this web assembly which means that we can execute
+1:16:03
+them in JavaScript which means you can execute them in a browser and in node and we can use that in the types of code
+1:16:10
+and the work that I'm doing and there's another thing that's happened which is the quantization of things that is
+1:16:16
+basically squashing down your models so that they can be used in environments like the ones I want to use you lose
+1:16:21
+some of the position in it so it's a bit like I suppose from our perspective if
+1:16:26
+you're thinking a front-end coder it's a bit like using something like jpeg you still get a great picture and some of
+1:16:31
+the results I've seen is like to take a model that predicts at 90 and brings it down to about 80 but you see like a a
+1:16:38
+quarter of the size the model is so that helps a great deal this combination allows us to create things where we can
+1:16:44
+actually execute complex large models on in and the browser so hopefully I can
+1:16:51
+show you some of that in operation so let's start with a quick one this
+1:16:57
+one's actually running in the browser the whole model everything's running in the browser
+1:17:04
+so see if I can get a spell right
+1:17:10
+and what it's doing is it's looking at how I'm writing and the things that I'm writing about and detecting the emotions
+1:17:17
+in there so if I put in I liked it saying love if I switch that to hate
+1:17:25
+Alliance anger disgust and this is a model a Transformer model working within
+1:17:31
+the within a browser it can do other things as well hopefully we can see one here this model is one
+1:17:39
+that's a bit like some of the code generation you've seen I probably just need to collapse that down a bit so you can see it so I've started at the
+1:17:45
+beginning of a unfortunately this model is only working with python IE and you can write python but I've given it the
+1:17:52
+beginning of python function and if it's working it will complete and finish the python function for me all in the
+1:17:58
+browser working and operating in the browser um so
+1:18:04
+um let's get back to those slides just to finish
+1:18:13
+I think from my perspective that we start to see the beginnings of a point of democratization and commodification
+1:18:19
+of this area of computing it's becoming easier for people like myself to start
+1:18:25
+playing with it and understanding it the cliff Edge or the cliff that used to be how you join this and get involved in it
+1:18:31
+which was all about learning mathematics is getting a lot less that doesn't mean that you can't you don't need to know
+1:18:37
+that and I definitely need to know it I've got so much more to learn I reckon I've got at least another two years of looking at this before I really know
+1:18:43
+what I'm talking about but I've been able to build within a few months uh models myself using data myself that
+1:18:51
+are of a commercial quality that I can productize and using things that I I can use myself which means that I'm on the
+1:18:58
+road and as soon as you can get a vantage out of something and do that you work your way into a subject if um
+1:19:04
+before it was a lot more difficult to do that so it's a really fascinating time
+1:19:09
+I'm really enjoying this journey and that's the reason why I wanted to share it with you and I hope that you know
+1:19:15
+some of you will become interested in it as well saying thank you foreign
+1:19:25
+[Applause] really interesting I think even just in the past few weeks you know in the news
+1:19:31
+we've seen so much yeah on this topic and there's so many tools that have been released even the last couple of days
+1:19:36
+and I think that you know as developers it's quite exciting to have the opportunity to work and understand these
+1:19:44
+tools uh to kind of squeeze value out of them um I think it's probably going to be necessary for some of our jobs uh in
+1:19:50
+the future to kind of really understand those uh so thank you um for that does anybody have any questions for Glenn
+1:19:56
+person from Tom very interesting
+1:20:01
+um how do you know what size is big enough for training a Model A fine-tuning your model
+1:20:08
+so I mean basically um the if I don't know if you saw the
+1:20:13
+figures there I was using very small numbers um um so 1600 was what I was using for the for for the job titles and I was
+1:20:20
+getting up to 90 odd percent I think I could probably still go quite a lot further than that and I was in a very small domain as well so it's all about
+1:20:26
+the ux job titles I suspect depending on how you broaden that whether it still work would be a really interesting call
+1:20:32
+to go experimentation everything with this is experimentation try it see it rip back again test it and then you keep
+1:20:40
+going until you can't get any more gain I think is the answer to your question hmm
+1:20:52
+um yeah uh I think it's really interesting that that you sort of go into ml from like a JavaScript point of
+1:20:58
+view and like having gone on that journey I just wonder like considering
+1:21:03
+how many tools exist in like the kind of python world
+1:21:08
+compared to the JS world do you think that the time that you
+1:21:13
+spent learning the fewer tools was better or worse than the extra time
+1:21:19
+that you'd have spent dealing with python yeah it's a you know because I
+1:21:24
+mean I'm a developer I mean like obviously I'm a JS developer as I'm here but I'm just curious because like you've done it one way and I'm just is it good
+1:21:31
+so yes so you know apart from being a complete pendant I think um there is
+1:21:36
+there is an advantage to it I found sometimes that when I learn in in coding you you often just copy and paste
+1:21:43
+without actually learning the fundamentals a great deal um and I I have been doing stuff in
+1:21:49
+Python and actually I found that I'm quite attracted to it as a language a lot more than I thought I would be but
+1:21:55
+what I've learned by translating it is I've had to learn the fundamentals and sometimes there's gaps so some of the
+1:22:01
+things like being able to tokenize words so basically the bit where you break the words up there's um there's a lot of the
+1:22:07
+Transformer models uh break into subverbs they don't use like the full word they break them down there's
+1:22:13
+advantages to doing that which means that the the encoders are really much more complicated some of them are not
+1:22:19
+available some of them you have to actually go out and actually code yourself and in doing so I've learned a lot more so yes it's been a very
+1:22:26
+expensive way of doing it and maybe something I might not redo again but it has helped me learn
+1:22:32
+[Music] accidentally three or four days later oh you know look at this uh one question
+1:22:39
+story whether on in the browser like uh models
+1:22:46
+that you deploy and like I do you think are the main advantage is just like inference speeds and like or having it
+1:22:53
+on the model like do you think there's a future in which the models are sort of deployed locally on your device and like
+1:22:59
+you no longer need this like outgoing internet connection like how much how Lotto did you find that uh the
+1:23:05
+in-browser versions of them in comparison to hang up an API open ai's API itself yeah
+1:23:12
+so that they so basically they usually start with the smaller models so so for example but
+1:23:19
+which is a commonly used model um there's about 60 variants of it and there's distilled which is a very
+1:23:24
+smaller version and then they even crunch that down so there is a there is a degree of loss in there it's a playoff
+1:23:31
+um and it depends what you're trying to do because sometimes you can find that you can use some of the smaller more
+1:23:37
+precise models that are aimed at specific use tasks so are not that big to start with and if you're doing that
+1:23:42
+then then you can actually use them some of them that are loaded into here are between sort of 40 and 3 4 and 14
+1:23:49
+megabytes that's a lot to stick into a browser and pretty unpractical from outside of the demo at a Meetup
+1:23:56
+the beauty about it though is what we're starting to see is as it's democratized
+1:24:02
+and people are looking at these big language models which are huge they mean many gigabytes you know
+1:24:08
+um people want to run it on their local machines so on this machine I've got something called alpaca which has just come out which is one of the Google's
+1:24:16
+bar system which they released for educational review actually running locally on this machine
+1:24:22
+um it's not very good it's one of the slow it's one of the smaller models but it's pushing people to try and make this
+1:24:29
+stuff so they can run locally or on other devices or be distributed across maybe two or three devices in your house
+1:24:35
+and use it so these are the not practically the answer to question it's not they're not really practical but
+1:24:41
+what you're seeing is the first stages of people grasping this technology and trying to bring it in and use it
+1:24:47
+themselves and democratize it cool uh I'm gonna pause the questions

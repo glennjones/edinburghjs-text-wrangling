@@ -1,0 +1,156 @@
+{
+    "cells": [
+        {
+            "language": "markdown",
+            "source": [
+                "# Notebook example glenn"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "require('esm-hook');\nlet textWrangling = require('../dist/wrangling.js').default;"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "# Simple word tokenise\nUses a couple of regex to remove speical chars and then split the text into words. \nTaken from the npm module based Tensorflow's [-tf.keras.preprocessing.text.Tokenizer](https://www.tensorflow.org/api_docs/python/tf/keras/preprocessing/text/Tokenizer)"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "function tokenise(text, lower = true) {\n    if (lower) text = text.toLowerCase();\n    return text\n      .replace(/[\\\\.,/#!$%^&*;:{}=\\-_`~()]/g, \"\")\n      .replace(/\\s{2,}/g, \" \")\n      .split(\" \");\n}\n\ntokenise('Snr. Front-end Developer');"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "text/plain",
+                            "value": [
+                                "[",
+                                "  \u001b[32m'snr'\u001b[39m,",
+                                "  \u001b[32m'frontend'\u001b[39m,",
+                                "  \u001b[32m'developer'\u001b[39m",
+                                "]"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "# More sophisticated tree tokenization - with unist\nUsing two modules from Unified collective. We can parse the text into a 'unist' syntax tree. It has maintained the strauctural relationship of elements in the text."
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "ParseEnglish = require('parse-english').ParseEnglish;\ninspect = require('unist-util-inspect').inspect;\n\ntree = new ParseEnglish().parse('Snr. Front-end Developer. Another sentence.') // Another sentence.\nconsole.log(inspect(tree, {showPositions: false}))"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "\u001b[1mRootNode\u001b[22m\u001b[2m[\u001b[22m\u001b[33m1\u001b[39m\u001b[2m]\u001b[22m",
+                                "\u001b[2m└─0\u001b[22m \u001b[1mParagraphNode\u001b[22m\u001b[2m[\u001b[22m\u001b[33m3\u001b[39m\u001b[2m]\u001b[22m",
+                                "    \u001b[2m├─0\u001b[22m \u001b[1mSentenceNode\u001b[22m\u001b[2m[\u001b[22m\u001b[33m6\u001b[39m\u001b[2m]\u001b[22m",
+                                "    \u001b[2m│\u001b[22m   \u001b[2m├─0\u001b[22m \u001b[1mWordNode\u001b[22m\u001b[2m[\u001b[22m\u001b[33m2\u001b[39m\u001b[2m]\u001b[22m",
+                                "    \u001b[2m│\u001b[22m   \u001b[2m│\u001b[22m   \u001b[2m├─0\u001b[22m \u001b[1mTextNode\u001b[22m \u001b[32m\"Snr\"\u001b[39m",
+                                "    \u001b[2m│\u001b[22m   \u001b[2m│\u001b[22m   \u001b[2m└─1\u001b[22m \u001b[1mPunctuationNode\u001b[22m \u001b[32m\".\"\u001b[39m",
+                                "    \u001b[2m│\u001b[22m   \u001b[2m├─1\u001b[22m \u001b[1mWhiteSpaceNode\u001b[22m \u001b[32m\" \"\u001b[39m",
+                                "    \u001b[2m│\u001b[22m   \u001b[2m├─2\u001b[22m \u001b[1mWordNode\u001b[22m\u001b[2m[\u001b[22m\u001b[33m3\u001b[39m\u001b[2m]\u001b[22m",
+                                "    \u001b[2m│\u001b[22m   \u001b[2m│\u001b[22m   \u001b[2m├─0\u001b[22m \u001b[1mTextNode\u001b[22m \u001b[32m\"Front\"\u001b[39m",
+                                "    \u001b[2m│\u001b[22m   \u001b[2m│\u001b[22m   \u001b[2m├─1\u001b[22m \u001b[1mPunctuationNode\u001b[22m \u001b[32m\"-\"\u001b[39m",
+                                "    \u001b[2m│\u001b[22m   \u001b[2m│\u001b[22m   \u001b[2m└─2\u001b[22m \u001b[1mTextNode\u001b[22m \u001b[32m\"end\"\u001b[39m",
+                                "    \u001b[2m│\u001b[22m   \u001b[2m├─3\u001b[22m \u001b[1mWhiteSpaceNode\u001b[22m \u001b[32m\" \"\u001b[39m",
+                                "    \u001b[2m│\u001b[22m   \u001b[2m├─4\u001b[22m \u001b[1mWordNode\u001b[22m\u001b[2m[\u001b[22m\u001b[33m1\u001b[39m\u001b[2m]\u001b[22m",
+                                "    \u001b[2m│\u001b[22m   \u001b[2m│\u001b[22m   \u001b[2m└─0\u001b[22m \u001b[1mTextNode\u001b[22m \u001b[32m\"Developer\"\u001b[39m",
+                                "    \u001b[2m│\u001b[22m   \u001b[2m└─5\u001b[22m \u001b[1mPunctuationNode\u001b[22m \u001b[32m\".\"\u001b[39m",
+                                "    \u001b[2m├─1\u001b[22m \u001b[1mWhiteSpaceNode\u001b[22m \u001b[32m\" \"\u001b[39m",
+                                "    \u001b[2m└─2\u001b[22m \u001b[1mSentenceNode\u001b[22m\u001b[2m[\u001b[22m\u001b[33m4\u001b[39m\u001b[2m]\u001b[22m",
+                                "        \u001b[2m├─0\u001b[22m \u001b[1mWordNode\u001b[22m\u001b[2m[\u001b[22m\u001b[33m1\u001b[39m\u001b[2m]\u001b[22m",
+                                "        \u001b[2m│\u001b[22m   \u001b[2m└─0\u001b[22m \u001b[1mTextNode\u001b[22m \u001b[32m\"Another\"\u001b[39m",
+                                "        \u001b[2m├─1\u001b[22m \u001b[1mWhiteSpaceNode\u001b[22m \u001b[32m\" \"\u001b[39m",
+                                "        \u001b[2m├─2\u001b[22m \u001b[1mWordNode\u001b[22m\u001b[2m[\u001b[22m\u001b[33m1\u001b[39m\u001b[2m]\u001b[22m",
+                                "        \u001b[2m│\u001b[22m   \u001b[2m└─0\u001b[22m \u001b[1mTextNode\u001b[22m \u001b[32m\"sentence\"\u001b[39m",
+                                "        \u001b[2m└─3\u001b[22m \u001b[1mPunctuationNode\u001b[22m \u001b[32m\".\"\u001b[39m",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "# Fine grain text manipulation - with nlcst and unist\nUnified has many utilities modules which can transverse trees and extract just what you need. The 'nlcst-normalize' feature is an example of contraction ie the simplification of words."
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "visit = require('unist-util-visit').visit;\nnormalize = require('nlcst-normalize').normalize;\ntoString = require('nlcst-to-string').toString;\n\ntree = new ParseEnglish().parse('Snr. Front-end Developer')\nout = [];\n\nvisit(tree, 'WordNode', (node) => {   // try: SentenceNode, WordNode, TextNode, PunctuationNode\n    //out.push(toString(node)); \n    out.push( normalize( toString(node).toLowerCase() ) ); // try each of these lines\n})\nout"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "text/plain",
+                            "value": [
+                                "[",
+                                "  \u001b[32m'snr.'\u001b[39m,",
+                                "  \u001b[32m'frontend'\u001b[39m,",
+                                "  \u001b[32m'developer'\u001b[39m",
+                                "]"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "# WinkNLP - A full NLP pipeline\n__Parts of Speach (POS)__ <br>\nParts of speech are the different categories of words that are used to make up sentences. For example, nouns, verbs, adjectives, and adverbs are all different types of parts of speech."
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "const winkNLP = require( 'wink-nlp' );\nconst model = require( 'wink-eng-lite-web-model' );\nconst nlp = winkNLP( model );\nconst its = nlp.its;\n\nconst text = 'We are planning hiring more front-end developers'; // Snr. Front-end Developer\nconst doc = nlp.readDoc( text );\n//stem = await doc.tokens().out( its.shape ); // its.shape its.stem, its.lemma, its.pos, its.value\ntextWrangling.inspectWinkDoc(doc, its);"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "text/html",
+                            "value": [
+                                "<style> table, th, tr { text-align: left; }</style><table><thead><tr><th style=\"text-align: left;\">text</th><th style=\"text-align: left;\">shape</th><th style=\"text-align: left;\">stop word</th><th style=\"text-align: left;\">part of speech</th><th style=\"text-align: left;\">stemmed</th><th style=\"text-align: left;\">lemmatized</th></tr></thead><tbody><tr><td style=\"text-align: left;\">We</td><td style=\"text-align: left;\">Xx</td><td style=\"text-align: left;\">true</td><td style=\"text-align: left;\">PRON</td><td style=\"text-align: left;\">we</td><td style=\"text-align: left;\">we</td></tr><tr><td style=\"text-align: left;\">are</td><td style=\"text-align: left;\">xxx</td><td style=\"text-align: left;\">true</td><td style=\"text-align: left;\">AUX</td><td style=\"text-align: left;\">are</td><td style=\"text-align: left;\">be</td></tr><tr><td style=\"text-align: left;\">planning</td><td style=\"text-align: left;\">xxxx</td><td style=\"text-align: left;\">false</td><td style=\"text-align: left;\">VERB</td><td style=\"text-align: left;\">plan</td><td style=\"text-align: left;\">plan</td></tr><tr><td style=\"text-align: left;\">hiring</td><td style=\"text-align: left;\">xxxx</td><td style=\"text-align: left;\">false</td><td style=\"text-align: left;\">VERB</td><td style=\"text-align: left;\">hire</td><td style=\"text-align: left;\">hire</td></tr><tr><td style=\"text-align: left;\">more</td><td style=\"text-align: left;\">xxxx</td><td style=\"text-align: left;\">true</td><td style=\"text-align: left;\">ADJ</td><td style=\"text-align: left;\">more</td><td style=\"text-align: left;\">more</td></tr><tr><td style=\"text-align: left;\">front</td><td style=\"text-align: left;\">xxxx</td><td style=\"text-align: left;\">true</td><td style=\"text-align: left;\">NOUN</td><td style=\"text-align: left;\">front</td><td style=\"text-align: left;\">front</td></tr><tr><td style=\"text-align: left;\">-</td><td style=\"text-align: left;\">-</td><td style=\"text-align: left;\">false</td><td style=\"text-align: left;\">PUNCT</td><td style=\"text-align: left;\">-</td><td style=\"text-align: left;\">-</td></tr><tr><td style=\"text-align: left;\">end</td><td style=\"text-align: left;\">xxx</td><td style=\"text-align: left;\">false</td><td style=\"text-align: left;\">NOUN</td><td style=\"text-align: left;\">end</td><td style=\"text-align: left;\">end</td></tr><tr><td style=\"text-align: left;\">developers</td><td style=\"text-align: left;\">xxxx</td><td style=\"text-align: left;\">false</td><td style=\"text-align: left;\">NOUN</td><td style=\"text-align: left;\">develop</td><td style=\"text-align: left;\">developer</td></tr></tbody></table>"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "<div id=\"dataTable\"></div>"
+            ],
+            "outputs": []
+        }
+    ]
+}

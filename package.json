@@ -1,0 +1,22 @@
+{
+  "name": "edinburghjs-text-wrangling",
+  "version": "1.0.0",
+  "author": "Glenn Jones",
+  "license": "MIT",
+  "dependencies": {
+    "@glennjones/prompt": "^1.0.0",
+    "arquero": "^5.1.0",
+    "dotenv": "^16.0.3",
+    "esm-hook": "^0.1.4",
+    "nlcst-normalize": "^3.1.1",
+    "nlcst-to-string": "^3.1.1",
+    "parse-english": "^6.0.0",
+    "stopword": "^2.0.7",
+    "unist-util-filter": "^4.0.1",
+    "unist-util-inspect": "^7.0.2",
+    "unist-util-visit": "^4.1.2",
+    "wink-eng-lite-web-model": "^1.4.3",
+    "wink-nlp": "^1.13.0",
+    "wink-nlp-utils": "^2.1.0"
+  }
+}

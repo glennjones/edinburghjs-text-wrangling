@@ -1,0 +1,157 @@
+{
+    "cells": [
+        {
+            "language": "markdown",
+            "source": [
+                "# Prompt - Name entity recognition (NER) - UX Job titles"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### Add Prompt module and get API key from .env file"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "const Prompt = require('@glennjones/prompt')\nconst {Prompter, OpenAI} = Prompt;\n\nconst DotEnv = require('dotenv');\nDotEnv.config({path: '../.env'});\nconst apiKey = process.env.OPENAI_API_KEY;"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### Load the model for OpenAI"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "let model = new OpenAI(apiKey);\nlet nlpPrompter = new Prompter(model);"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### Call the prompt module \n* The `domain` property helps fucus the language model.\n* The `textInput` property is the text to be parsed."
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "let result = await nlpPrompter.fit('ner.njk', {\n    domain: 'ux design',\n    textInput: 'Senior UX Researcher, part-time 6 month contract, Edinburgh - Hybrid',\n  });\nconsole.log(result);"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "4.184622458003461 seconds",
+                                "{",
+                                "  promptTokens: 152,",
+                                "  completionTokens: 99,",
+                                "  totalTokens: 251,",
+                                "  data: [",
+                                "    { label: 'Position', text: 'Senior UX Researcher' },",
+                                "    { label: 'Contract Type', text: 'part-time' },",
+                                "    { label: 'Contract Duration', text: '6 month' },",
+                                "    { label: 'Location', text: 'Edinburgh' },",
+                                "    { label: 'Work Type', text: 'Hybrid' },",
+                                "    { branch: 'UX Design', group: 'Research' }",
+                                "  ]",
+                                "}",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### With labels\n* The `domain` property helps fucus the language model.\n* The `textInput` property is the text to be parsed.\n* The `labels` array is a list entities that the model should extract. "
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "let result = await nlpPrompter.fit('ner.njk', {\n    domain: 'ux design',\n    labels: [\"JOBTITLE\", \"SENORITY\", \"EMPLOYMENT_TYPE\", \"DURATION\", \"LOCATION\", \"REMOTE_OPTION\"],\n    textInput: 'Senior Product Designer (UX)'\n  });\nconsole.log(result);"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "3.7851178329959514 seconds",
+                                "{",
+                                "  promptTokens: 172,",
+                                "  completionTokens: 57,",
+                                "  totalTokens: 229,",
+                                "  data: [",
+                                "    { label: 'JOBTITLE', text: 'Senior Product Designer' },",
+                                "    { label: 'SENORITY', text: 'Senior' },",
+                                "    { label: 'EMPLOYMENT_TYPE', text: 'UX' }",
+                                "  ]",
+                                "}",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "### With inline fine tuning\n* The `domain` property helps fucus the language model.\n* The `textInput` property is the text to be parsed.\n* The `labels` array is a list entities that the model should extract. \n* The `examples` array take an array of arrays. Each of which has two properties. The example input text and the labels data you would expect to be returned. You nay add muiltple examples, but remember there is a limit to how big the prompt can be, which is set by the model you are using."
+            ],
+            "outputs": []
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "let text = \"Senior UX Researcher, part-time 6 month contract, Edinburgh - Hybrid\"\nlet labels = [\n  { label: 'JOBTITLE', text: 'Senior UX Researcher', start: 0, end: 20 },\n  { label: 'SENIORITY', text: 'Senior', start: 0, end: 6 },\n  { label: 'EMPLOYMENT_TYPE', text: 'part-time', start: 22, end: 31 },\n  { label: 'EMPLOYMENT_TYPE', text: 'contract', start: 40, end: 47 },\n  { label: 'DURATION', text: '6 month', start: 32, end: 39 },\n  { label: 'LOCATION', text: 'Edinburgh', start: 50, end: 59 },\n  { label: 'REMOTE_OPTION', text: 'Hybrid', start: 62, end: 70 },\n  { branch: 'UX Design', group: 'Research' }\n]\nlet fineTune = [\n  [text, labels]\n]\n\nlet result = await nlpPrompter.fit('ner.njk', {\n    domain: 'ux design',\n    labels: [\"JOBTITLE\", \"SENORITY\", \"EMPLOYMENT_TYPE\", \"DURATION\", \"LOCATION\", \"REMOTE_OPTION\"],\n    textInput: 'UX Copy Writer Team Leader, Edinburgh or Hybrid',\n    examples: fineTune\n    });\nconsole.log(result);"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "5.15570462499559 seconds",
+                                "{",
+                                "  promptTokens: 504,",
+                                "  completionTokens: 186,",
+                                "  totalTokens: 690,",
+                                "  data: [",
+                                "    {",
+                                "      label: 'JOBTITLE',",
+                                "      text: 'UX Copy Writer Team Leader',",
+                                "      start: 0,",
+                                "      end: 28",
+                                "    },",
+                                "    { label: 'SENIORITY', text: 'Team Leader', start: 19, end: 28 },",
+                                "    { label: 'LOCATION', text: 'Edinburgh', start: 30, end: 39 },",
+                                "    { label: 'REMOTE_OPTION', text: 'Hybrid', start: 42, end: 50 },",
+                                "    { branch: 'UX Design', group: 'Copy Writing' }",
+                                "  ]",
+                                "}",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
