@@ -22,4 +22,4 @@ Once you have done the above then clone the git repo onto your local machine and
 
 ## Prompt
 
-The prompt tool demo is in a public repo on [https://github.com/glennjones/prompt](https://github.com/glennjones/prompt)
+The prompt tool demo is in a public repo on [https://github.com/glennjones/prompt](https://github.com/glennjones/prompt)  - It well worth looking at the [Langchain JS](https://github.com/hwchase17/langchainjs) which is the most heavily used tool of this type at the moment (Apr 2023) Its more advanced and has a lot of additional/useful features my prompt tool does not have.
